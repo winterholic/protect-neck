@@ -13,8 +13,17 @@
 
 ## 📸 스크린샷
 
-<!-- 나중에 추가 -->
-_스크린샷 추가 예정_
+### 타이머 화면
+![타이머 화면](resources/images/screenshot_1.png)
+
+### 선택 화면
+![선택 화면](resources/images/screenshot_2.png)
+
+### 스트레칭 가이드
+![스트레칭 화면](resources/images/screenshot_3.png)
+
+### 시스템 트레이
+![시스템 트레이](resources/images/screenshot_4.png)
 
 ## 🚀 설치 및 실행
 
