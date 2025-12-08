@@ -1,0 +1,13 @@
+# Protect Neck - Neck Health Guardian
+# Python 3.10+
+
+# GUI Framework
+PyQt5==5.15.10
+PyQt5-Qt5==5.15.2
+PyQt5-sip==12.13.0
+
+# Image processing
+Pillow==10.1.0
+
+# EXE Builder
+pyinstaller==6.3.0
