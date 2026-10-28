@@ -1,0 +1,224 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; img-src 'self'; style-src 'self'; script-src 'self'">
+  <title>목 건강 지킴이</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <!-- 홈: 집중 타이머 -->
+  <main class="view" id="view-home" hidden>
+    <header class="bar">
+      <h1 class="bar-title">목 건강 지킴이</h1>
+      <button type="button" class="icon-btn" id="open-settings" aria-label="설정">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 15.5a3.5 3.5 0 1 0 0-7 3.5 3.5 0 0 0 0 7Z"/><path d="M19.4 15a1.7 1.7 0 0 0 .3 1.8l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.7 1.7 0 0 0-1.8-.3 1.7 1.7 0 0 0-1 1.5V21a2 2 0 1 1-4 0v-.1a1.7 1.7 0 0 0-1.1-1.5 1.7 1.7 0 0 0-1.8.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1.7 1.7 0 0 0 .3-1.8 1.7 1.7 0 0 0-1.5-1H3a2 2 0 1 1 0-4h.1a1.7 1.7 0 0 0 1.5-1.1 1.7 1.7 0 0 0-.3-1.8l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1a1.7 1.7 0 0 0 1.8.3H9a1.7 1.7 0 0 0 1-1.5V3a2 2 0 1 1 4 0v.1a1.7 1.7 0 0 0 1 1.5 1.7 1.7 0 0 0 1.8-.3l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.7 1.7 0 0 0-.3 1.8V9a1.7 1.7 0 0 0 1.5 1H21a2 2 0 1 1 0 4h-.1a1.7 1.7 0 0 0-1.5 1Z"/></svg>
+      </button>
+    </header>
+
+    <section class="home-body">
+      <div class="ring" id="ring">
+        <svg viewBox="0 0 200 200" aria-hidden="true">
+          <circle class="ring-track" cx="100" cy="100" r="90"/>
+          <circle class="ring-fill" id="ring-fill" cx="100" cy="100" r="90"/>
+        </svg>
+        <div class="ring-center">
+          <p class="ring-time" id="home-time">30:00</p>
+          <p class="ring-status" id="home-status">집중 중</p>
+        </div>
+      </div>
+      <p class="home-hint" id="home-hint"></p>
+
+      <div class="home-actions">
+        <div class="btn-row">
+          <button type="button" class="btn" id="toggle-pause">일시정지</button>
+          <button type="button" class="btn" id="restart">처음부터</button>
+        </div>
+        <button type="button" class="btn btn-primary" id="stretch-now">지금 스트레칭</button>
+      </div>
+    </section>
+
+    <footer class="today" aria-label="오늘 기록">
+      <p class="today-label">오늘</p>
+      <dl class="today-stats" id="today-stats"></dl>
+    </footer>
+  </main>
+
+  <!-- 알림: 시간이 다 됨 -->
+  <main class="view" id="view-due" hidden>
+    <figure class="photo photo-due">
+      <img src="../../assets/stretch/chin_tuck.jpg" alt="" id="due-photo">
+    </figure>
+    <section class="due-body">
+      <h2 class="due-title" id="due-title">30분 지났어요</h2>
+      <p class="due-sub">목 좀 풀고 갈까요? 의자에 앉은 채로 할 수 있어요.</p>
+      <div class="due-actions">
+        <button type="button" class="btn btn-primary btn-lg" data-routine="basic" id="due-basic">스트레칭 시작 <span class="btn-meta" id="due-basic-meta"></span></button>
+        <button type="button" class="btn btn-lg" data-routine="quick" id="due-quick">빠르게 <span class="btn-meta" id="due-quick-meta"></span></button>
+      </div>
+      <div class="due-later">
+        <button type="button" class="link-btn" id="due-snooze">5분 뒤에</button>
+        <button type="button" class="link-btn" id="due-break">자리 비울게요</button>
+        <button type="button" class="link-btn" id="due-skip">이번엔 건너뛰기</button>
+      </div>
+    </section>
+  </main>
+
+  <!-- 스트레칭 진행 -->
+  <main class="view" id="view-stretch" hidden>
+    <figure class="photo photo-stretch">
+      <img alt="" id="st-photo">
+      <figcaption class="photo-fallback" id="st-fallback" hidden></figcaption>
+      <span class="chip chip-step" id="st-step"></span>
+      <span class="chip chip-side" id="st-side" hidden></span>
+    </figure>
+    <div class="progress" role="progressbar" aria-label="전체 진행" id="st-progress"><span id="st-progress-fill"></span></div>
+
+    <section class="st-body">
+      <div class="st-text">
+        <h2 class="st-name" id="st-name"></h2>
+        <p class="st-cue" id="st-cue"></p>
+      </div>
+      <div class="st-count">
+        <p class="st-phase" id="st-phase"></p>
+        <p class="st-seconds" id="st-seconds" aria-live="off"></p>
+        <ol class="reps" id="st-reps" aria-label="반복"></ol>
+      </div>
+    </section>
+
+    <div class="st-controls" id="st-controls">
+      <button type="button" class="btn" id="st-prev">이전</button>
+      <button type="button" class="btn btn-primary" id="st-pause">일시정지</button>
+      <button type="button" class="btn" id="st-next">다음</button>
+    </div>
+    <div class="st-resume" id="st-resume" hidden>
+      <p>잠시 멈췄어요. 이어서 할까요?</p>
+      <div class="btn-row">
+        <button type="button" class="btn btn-primary" id="st-resume-yes">이어서 하기</button>
+        <button type="button" class="btn" id="st-resume-no">그만하기</button>
+      </div>
+    </div>
+    <footer class="st-foot">
+      <p class="caution">아프거나 저리면 바로 멈추세요.</p>
+      <button type="button" class="link-btn" id="st-stop">그만하기</button>
+    </footer>
+  </main>
+
+  <!-- 완료 -->
+  <main class="view view-center" id="view-done" hidden>
+    <div class="done-mark" aria-hidden="true">
+      <svg viewBox="0 0 24 24"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg>
+    </div>
+    <h2 class="done-title">잘했어요</h2>
+    <p class="done-sub" id="done-sub"></p>
+    <button type="button" class="btn" id="done-home">홈으로</button>
+  </main>
+
+  <!-- 휴식(자리 비움) -->
+  <main class="view" id="view-break" hidden>
+    <figure class="photo photo-break">
+      <img src="../../assets/stretch/break_walk.jpg" alt="사무실 복도를 걷는 사람">
+    </figure>
+    <section class="break-body">
+      <p class="break-label">쉬는 중</p>
+      <p class="break-time" id="break-time">00:00</p>
+      <p class="break-sub">물 한 잔 마시고 가볍게 걸어 보세요.</p>
+      <button type="button" class="btn btn-primary btn-lg" id="break-back">돌아왔어요</button>
+    </section>
+  </main>
+
+  <!-- 설정 -->
+  <main class="view" id="view-settings" hidden>
+    <header class="bar">
+      <button type="button" class="icon-btn" id="close-settings" aria-label="뒤로">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M15 18l-6-6 6-6"/></svg>
+      </button>
+      <h1 class="bar-title">설정</h1>
+      <span class="bar-spacer"></span>
+    </header>
+    <form class="settings" id="settings" novalidate>
+      <fieldset class="group">
+        <legend>타이머</legend>
+        <div class="row">
+          <span class="row-text"><span class="row-title" id="lbl-interval">알림 주기</span><span class="row-desc">바꾸면 타이머를 새로 시작해요</span></span>
+          <div class="stepper" role="group" aria-labelledby="lbl-interval">
+            <button type="button" class="stepper-btn" data-step="-5" aria-label="5분 줄이기">
+              <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 12h12"/></svg>
+            </button>
+            <output class="stepper-value" id="interval-value" aria-live="polite"></output>
+            <button type="button" class="stepper-btn" data-step="5" aria-label="5분 늘리기">
+              <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 6v12M6 12h12"/></svg>
+            </button>
+          </div>
+        </div>
+        <div class="row">
+          <span class="row-text"><span class="row-title" id="lbl-snooze">「나중에」 누르면</span></span>
+          <div class="seg" role="radiogroup" aria-labelledby="lbl-snooze" data-name="snoozeMin" data-options="3:3분 뒤,5:5분 뒤,10:10분 뒤"></div>
+        </div>
+        <div class="row row-stack">
+          <span class="row-text"><span class="row-title" id="lbl-idle">자리 비움으로 볼 시간</span><span class="row-desc">이만큼 입력이 없으면 쉰 걸로 치고, 돌아왔을 때 새로 시작해요</span></span>
+          <div class="seg seg-fill" role="radiogroup" aria-labelledby="lbl-idle" data-name="idleMin" data-options="3:3분,5:5분,10:10분,15:15분"></div>
+        </div>
+      </fieldset>
+      <fieldset class="group">
+        <legend>근무 시간</legend>
+        <label class="row">
+          <span class="row-text"><span class="row-title">근무 시간에만 알림</span><span class="row-desc">출근 시각에 저절로 시작하고 퇴근 시각에 멈춰요</span></span>
+          <input type="checkbox" class="switch" name="workEnabled" role="switch">
+        </label>
+        <div class="work-fields" id="work-fields">
+          <div class="row">
+            <span class="row-text"><span class="row-title" id="lbl-workStart">출근</span></span>
+            <button type="button" class="time-btn" data-name="workStart" aria-labelledby="lbl-workStart" aria-haspopup="dialog"></button>
+          </div>
+          <div class="row">
+            <span class="row-text"><span class="row-title" id="lbl-workEnd">퇴근</span></span>
+            <button type="button" class="time-btn" data-name="workEnd" aria-labelledby="lbl-workEnd" aria-haspopup="dialog"></button>
+          </div>
+          <div class="row">
+            <span class="row-text"><span class="row-title" id="days-label">요일</span></span>
+            <div class="days" role="group" aria-labelledby="days-label" id="work-days"></div>
+          </div>
+        </div>
+      </fieldset>
+      <fieldset class="group">
+        <legend>알림</legend>
+        <div class="row">
+          <span class="row-text"><span class="row-title" id="lbl-style">알림 방식</span></span>
+          <div class="seg" role="radiogroup" aria-labelledby="lbl-style" data-name="reminderStyle" data-options="window:창 띄우기,notification:알림만"></div>
+        </div>
+        <label class="row">
+          <span class="row-text"><span class="row-title">소리</span><span class="row-desc">알림과 동작이 바뀔 때</span></span>
+          <input type="checkbox" class="switch" name="sound" role="switch">
+        </label>
+      </fieldset>
+      <fieldset class="group">
+        <legend>스트레칭</legend>
+        <div class="row row-stack">
+          <span class="row-text"><span class="row-title" id="lbl-routine">「지금 스트레칭」 루틴</span></span>
+          <div class="seg seg-fill" role="radiogroup" aria-labelledby="lbl-routine" data-name="routine" id="set-routine"></div>
+        </div>
+      </fieldset>
+      <fieldset class="group">
+        <legend>앱</legend>
+        <label class="row">
+          <span class="row-text"><span class="row-title">로그인할 때 자동 실행</span><span class="row-desc">설치한 앱에서만 적용돼요</span></span>
+          <input type="checkbox" class="switch" name="launchAtLogin" role="switch">
+        </label>
+      </fieldset>
+      <p class="settings-saved" id="settings-saved" aria-live="polite"></p>
+    </form>
+
+    <div class="time-pop" id="time-pop" role="dialog" aria-label="시각 고르기" hidden>
+      <div class="time-cols">
+        <ul class="time-col" id="time-hours" role="listbox" aria-label="시"></ul>
+        <ul class="time-col" id="time-mins" role="listbox" aria-label="분"></ul>
+      </div>
+    </div>
+  </main>
+
+  <script src="../shared/routines.js"></script>
+  <script src="sound.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
