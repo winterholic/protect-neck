@@ -1,0 +1,69 @@
+{
+  "name": "protect-neck",
+  "productName": "ProtectNeck",
+  "version": "2.0.0",
+  "description": "정해진 시간마다 목·어깨 스트레칭을 안내하는 데스크톱 앱",
+  "main": "src/main/main.js",
+  "author": "winterholic",
+  "license": "MIT",
+  "private": true,
+  "scripts": {
+    "start": "electron .",
+    "test": "node --test test/*.test.js",
+    "dist:mac": "electron-builder --mac",
+    "dist:win": "electron-builder --win"
+  },
+  "build": {
+    "appId": "io.github.winterholic.protectneck",
+    "productName": "ProtectNeck",
+    "files": [
+      "src/**/*",
+      "assets/**/*",
+      "package.json"
+    ],
+    "directories": {
+      "output": "dist"
+    },
+    "mac": {
+      "target": [
+        {
+          "target": "dmg",
+          "arch": [
+            "universal"
+          ]
+        }
+      ],
+      "icon": "assets/icon.png",
+      "category": "public.app-category.healthcare-fitness",
+      "artifactName": "protect-neck-${version}-mac.${ext}",
+      "extendInfo": {
+        "CFBundleDisplayName": "목 건강 지킴이"
+      },
+      "identity": "-",
+      "hardenedRuntime": false
+    },
+    "win": {
+      "target": [
+        {
+          "target": "nsis",
+          "arch": [
+            "x64",
+            "arm64"
+          ]
+        }
+      ],
+      "icon": "assets/icon.png",
+      "artifactName": "protect-neck-${version}-win-setup.${ext}"
+    },
+    "nsis": {
+      "oneClick": false,
+      "allowToChangeInstallationDirectory": true,
+      "shortcutName": "목 건강 지킴이",
+      "uninstallDisplayName": "목 건강 지킴이"
+    }
+  },
+  "devDependencies": {
+    "electron": "^45.1.0",
+    "electron-builder": "^26.18.0"
+  }
+}
